@@ -1,7 +1,7 @@
 name: Run Apartments Finder
 
 on:
-  workflow_dispatch:  # Allows manual trigger from GitHub Actions
+  workflow_dispatch:  # Allows manual triggering from GitHub Actions
 
 jobs:
   run-script:
@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3  # Checkout the repository code
+        uses: actions/checkout@v3  # Checks out the repository code
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,4 +34,4 @@ jobs:
           FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
         run: |
           source venv/bin/activate
-          python main.py
+          python apartments_finder/main.py
