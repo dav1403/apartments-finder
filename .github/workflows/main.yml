@@ -1,0 +1,3 @@
+git add .github/workflows/apartments-finder.yml
+git commit -m "Add GitHub Actions workflow for Apartments Finder"
+git push origin main  # Adjust branch name if not `main`
