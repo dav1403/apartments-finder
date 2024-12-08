@@ -32,8 +32,7 @@ jobs:
           FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
           FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
           FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
-          PYTHONPATH: ${{ github.workspace }}/apartments_finder
+          PYTHONPATH: ${{ github.workspace }}  # Include the root directory in PYTHONPATH
         run: |
-          cd apartments_finder  # Navigate to the apartments_finder directory
-          source ../venv/bin/activate
-          python main.py
+          source venv/bin/activate
+          python apartments_finder/main.py  # Run the script directly
