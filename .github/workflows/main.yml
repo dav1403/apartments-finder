@@ -1,7 +1,7 @@
 name: Run Apartments Finder
 
 on:
-  workflow_dispatch:  # Allows manual triggering from GitHub Actions
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   run-script:
@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Check out the repository
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -21,6 +21,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+          pip install selenium  # Explicitly install selenium in case of issues
 
       - name: Run Apartments Finder Script
         env:
@@ -32,7 +33,6 @@ jobs:
           FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
           FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
           FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
-          PYTHONPATH: ${{ github.workspace }}  # Include the root directory in PYTHONPATH
         run: |
           source venv/bin/activate
-          python apartments_finder/main.py  # Run the script directly
+          python apartments_finder/main.py
