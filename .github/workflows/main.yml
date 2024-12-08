@@ -9,12 +9,12 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3  # Checks out the repository code
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Adjust the Python version if required
+          python-version: '3.9'
 
       - name: Install Dependencies
         run: |
@@ -32,6 +32,8 @@ jobs:
           FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
           FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
           FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
+          PYTHONPATH: ${{ github.workspace }}/apartments_finder
         run: |
-          source venv/bin/activate
-          python apartments_finder/main.py
+          cd apartments_finder  # Navigate to the apartments_finder directory
+          source ../venv/bin/activate
+          python main.py
