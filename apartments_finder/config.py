@@ -9,8 +9,12 @@ from apartment_post_filter import ApartmentFilter, PostFilter
 # Load environment variables
 load_dotenv("../.env")
 
+# Determine the absolute path for apartments_finder_config.json
+base_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(base_dir, "..", "apartments_finder_config.json")
+
 # Load configuration from JSON file
-with open('../apartments_finder_config.json', encoding='utf-8') as f:
+with open(config_path, encoding='utf-8') as f:
     _apartments_finder_config: Dict[str, Any] = json.load(f)
 
 
