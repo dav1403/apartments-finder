@@ -1,49 +1,42 @@
-name: Run Apartments Finder
+name: Python Application
 
 on:
-  workflow_dispatch:  # Allows manual trigger
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  run-script:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3  # Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9  # Specify your Python version
 
-      - name: Install Chrome and ChromeDriver
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          sudo apt-get install -y chromium-browser
-          wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
-        # Ensure to match the ChromeDriver version with the installed Chrome browser
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install selenium  # Install Selenium explicitly if not in requirements.txt
 
-      - name: Install Dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run Apartments Finder Script
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
-          TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID }}
-          TELEGRAM_BOT_APARTMENTS_LOGS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_LOGS_GROUP_CHAT_ID }}
-          FACEBOOK_USERNAME: ${{ secrets.FACEBOOK_USERNAME }}
-          FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
-          FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
-          FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
-        run: |
-          source venv/bin/activate
-          python apartments_finder/main.py
+    - name: Run the application
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
+        TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID }}
+        FACEBOOK_USERNAME: ${{ secrets.FACEBOOK_USERNAME }}
+        FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
+        FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
+      run: |
+        source venv/bin/activate
+        python apartments_finder/main.py
