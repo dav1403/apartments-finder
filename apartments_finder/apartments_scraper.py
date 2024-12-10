@@ -3,7 +3,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import AsyncIterator
 
-from entities import ApartmentPost
+from apartments_finder.entities import ApartmentPost  # Updated import
 from facebook_scraper import get_posts
 from apartments_finder.logger import logger
 
