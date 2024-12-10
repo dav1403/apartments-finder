@@ -31,19 +31,21 @@ jobs:
         source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
-        pip install selenium  # Ensure selenium is installed explicitly
+        pip install selenium  # Explicitly install selenium
 
-    - name: Debug Environment
+    - name: Debug Installation
       run: |
         source venv/bin/activate
-        pip freeze  # Output installed packages for debugging
-        which python  # Ensure the correct Python environment is active
+        pip freeze  # List installed packages
+        which python  # Verify Python binary location
+        python --version  # Ensure correct Python version is used
 
     - name: Run Apartments Finder Script
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
         TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID }}
+        TELEGRAM_BOT_APARTMENTS_LOGS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_LOGS_GROUP_CHAT_ID }}
         FACEBOOK_USERNAME: ${{ secrets.FACEBOOK_USERNAME }}
         FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
         FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
