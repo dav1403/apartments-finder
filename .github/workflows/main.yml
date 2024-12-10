@@ -20,10 +20,14 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y wget unzip chromium-browser
-        wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+        CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9.]+')
+        echo "Detected Chrome version: $CHROME_VERSION"
+        CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        wget "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
         sudo chmod +x /usr/local/bin/chromedriver
+        echo "Installed ChromeDriver version: $(chromedriver --version)"
 
     - name: Install Dependencies
       run: |
@@ -40,6 +44,8 @@ jobs:
         which python  # Verify Python binary location
         python --version  # Ensure correct Python version is used
         echo $PYTHONPATH  # Check PYTHONPATH
+        which chromedriver  # Verify ChromeDriver installation
+        chromedriver --version  # Verify ChromeDriver version
         ls -l  # List project files
         ls -l apartments_finder/  # Verify module structure
 
