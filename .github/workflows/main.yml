@@ -1,7 +1,7 @@
 name: Run Apartments Finder
 
 on:
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   run-script:
@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3  # Check out the repository
+      uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -19,18 +19,13 @@ jobs:
     - name: Install Google Chrome and ChromeDriver
       run: |
         sudo apt-get update
-        wget -qO- https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-        CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9.]+')
-        echo "Installed Google Chrome version: $CHROME_VERSION"
-        CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        wget "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+        sudo apt-get install -y wget unzip google-chrome-stable
+        wget "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
         sudo chmod +x /usr/local/bin/chromedriver
-        echo "Installed ChromeDriver version: $(chromedriver --version)"
+        echo "Google Chrome version: $(google-chrome --version)"
+        echo "ChromeDriver version: $(chromedriver --version)"
 
     - name: Install Dependencies
       run: |
@@ -38,20 +33,17 @@ jobs:
         source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
-        pip install selenium  # Explicitly install selenium
 
     - name: Debug Environment
       run: |
         source venv/bin/activate
-        pip freeze  # List installed packages
-        which python  # Verify Python binary location
-        python --version  # Ensure correct Python version is used
-        which google-chrome
-        google-chrome --version
+        pip freeze
+        which python
+        python --version
         which chromedriver
         chromedriver --version
-        ls -l  # List project files
-        ls -l apartments_finder/  # Verify module structure
+        which google-chrome
+        google-chrome --version
 
     - name: Run Apartments Finder Script
       env:
@@ -62,7 +54,8 @@ jobs:
         FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
         FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
         FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
-        PYTHONPATH: ${{ github.workspace }}/apartments-finder  # Explicitly set PYTHONPATH
+        PYTHONPATH: ${{ github.workspace }}/apartments-finder
+        SELENIUM_CHROMEDRIVER: /usr/local/bin/chromedriver
       run: |
         source venv/bin/activate
-        python -m apartments_finder.main  # Run the script as a module
+        python -m apartments_finder.main
