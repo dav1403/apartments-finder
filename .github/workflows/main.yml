@@ -33,23 +33,26 @@ jobs:
         pip install -r requirements.txt
         pip install selenium  # Explicitly install selenium
 
-    - name: Debug Installation
+    - name: Debug Environment
       run: |
         source venv/bin/activate
         pip freeze  # List installed packages
         which python  # Verify Python binary location
         python --version  # Ensure correct Python version is used
+        echo $PYTHONPATH  # Check PYTHONPATH
+        ls -l  # List project files
+        ls -l apartments_finder/  # Verify module structure
 
     - name: Run Apartments Finder Script
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
         TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_GROUP_CHAT_ID }}
-        TELEGRAM_BOT_APARTMENTS_LOGS_GROUP_CHAT_ID: ${{ secrets.TELEGRAM_BOT_APARTMENTS_LOGS_GROUP_CHAT_ID }}
         FACEBOOK_USERNAME: ${{ secrets.FACEBOOK_USERNAME }}
         FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
         FACEBOOK_GROUPS: ${{ secrets.FACEBOOK_GROUPS }}
         FACEBOOK_BACKUP_CODES: ${{ secrets.FACEBOOK_BACKUP_CODES }}
+        PYTHONPATH: ${{ github.workspace }}/apartments-finder  # Explicitly set PYTHONPATH
       run: |
         source venv/bin/activate
-        python apartments_finder/main.py
+        python -m apartments_finder.main  # Run the script as a module
