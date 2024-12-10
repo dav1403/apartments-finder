@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List
 
-from entities import ApartmentFilter, PostFilter, ApartmentPost
+from apartments_finder.entities import ApartmentFilter, PostFilter, ApartmentPost  # Updated import
 from apartments_finder.logger import logger
 
 
@@ -9,8 +9,8 @@ class ApartmentPostFilterer:
     async def is_match(self, apartment_post: ApartmentPost, apartment_filters: List[ApartmentFilter]):
         for apartment_filter in apartment_filters:
             if (
-                    apartment_filter.min_rooms <= apartment_post.rooms <= apartment_filter.max_rooms and
-                    apartment_filter.min_rent <= apartment_post.rent <= apartment_filter.max_rent
+                apartment_filter.min_rooms <= apartment_post.rooms <= apartment_filter.max_rooms and
+                apartment_filter.min_rent <= apartment_post.rent <= apartment_filter.max_rent
             ):
                 return True
 
