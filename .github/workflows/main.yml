@@ -16,14 +16,21 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install Chrome and ChromeDriver
+    - name: Install Google Chrome and ChromeDriver
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget unzip chromium-browser
-        wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+        wget -qO- https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9.]+')
+        echo "Installed Google Chrome version: $CHROME_VERSION"
+        CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        wget "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
         sudo chmod +x /usr/local/bin/chromedriver
+        echo "Installed ChromeDriver version: $(chromedriver --version)"
 
     - name: Install Dependencies
       run: |
@@ -39,7 +46,10 @@ jobs:
         pip freeze  # List installed packages
         which python  # Verify Python binary location
         python --version  # Ensure correct Python version is used
-        echo $PYTHONPATH  # Check PYTHONPATH
+        which google-chrome
+        google-chrome --version
+        which chromedriver
+        chromedriver --version
         ls -l  # List project files
         ls -l apartments_finder/  # Verify module structure
 
