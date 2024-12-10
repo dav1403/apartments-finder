@@ -1,9 +1,9 @@
 import json
 
 import openai
-from config import config
+from apartments_finder.config import config  # Updated import
 
-from entities import ApartmentPost
+from apartments_finder.entities import ApartmentPost
 from apartments_finder.exceptions import EnrichApartmentPostError
 from apartments_finder.logger import logger
 
