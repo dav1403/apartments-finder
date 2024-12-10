@@ -16,12 +16,23 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Install Chrome and ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          sudo apt-get install -y chromium-browser
+          wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+        # Ensure to match the ChromeDriver version with the installed Chrome browser
+
       - name: Install Dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
+          pip install --upgrade pip
           pip install -r requirements.txt
-          pip install selenium  # Explicitly install selenium in case of issues
 
       - name: Run Apartments Finder Script
         env:
