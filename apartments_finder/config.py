@@ -4,14 +4,17 @@ from typing import Set, Dict, Any
 
 from dotenv import load_dotenv
 
-from apartment_post_filter import ApartmentFilter, PostFilter
+from apartments_finder.apartment_post_filter import ApartmentFilter, PostFilter
 
 # Load environment variables
-load_dotenv("../.env")
+base_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(base_dir, "..", ".env")
+load_dotenv(env_path)
 
 # Determine the absolute path for apartments_finder_config.json
-base_dir = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(base_dir, "..", "apartments_finder_config.json")
+if not os.path.exists(config_path):
+    raise FileNotFoundError(f"Configuration file not found at {config_path}")
 
 # Load configuration from JSON file
 with open(config_path, encoding='utf-8') as f:
