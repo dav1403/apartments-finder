@@ -31,6 +31,13 @@ jobs:
         source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
+        pip install selenium  # Ensure selenium is installed explicitly
+
+    - name: Debug Environment
+      run: |
+        source venv/bin/activate
+        pip freeze  # Output installed packages for debugging
+        which python  # Ensure the correct Python environment is active
 
     - name: Run Apartments Finder Script
       env:
